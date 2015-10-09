@@ -5,24 +5,23 @@ package Dancer2::Plugin::DBIC;
 use strict;
 use warnings;
 use utf8;
-use Dancer2::Plugin;
+use Dancer2::Plugin2;
 use DBICx::Sugar;
 
-sub _schema {
-    my ($dsl, $name) = @_;
-    DBICx::Sugar::config( plugin_setting );
+plugin_keywords qw/schema resultset rset/;
+
+sub schema {
+    my ($plugin, $name) = @_;
+    DBICx::Sugar::config( $plugin->config );
     return DBICx::Sugar::schema($name);
 };
 
-sub _rset {
-    my ($dsl, $rset_name) = @_;
-    return schema($dsl)->resultset($rset_name);
+sub resultset {
+    my ($plugin, $rset_name) = @_;
+    return $plugin->schema->resultset($rset_name);
 }
 
-register schema    => \&_schema;
-register resultset => \&_rset;
-register rset      => \&_rset;
-register_plugin;
+*rset = *resultset;
 
 # ABSTRACT: DBIx::Class interface for Dancer2 applications
 
