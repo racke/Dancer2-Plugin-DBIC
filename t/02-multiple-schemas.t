@@ -62,17 +62,11 @@ throws_ok { schema->resultset('User')->find('bob') }
     qr/The schema default is not configured/,
     'Missing default schema error thrown';
 
-set plugins => {
-    DBIC => {
-        default => {
-            schema_class => 'Foo',
-            dsn =>  "dbi:SQLite:dbname=$dbfile1",
-        },
-        bar => {
-            schema_class => 'Foo',
-            dsn =>  "dbi:SQLite:dbname=$dbfile2",
-        },
-    }
+my ( $plugin ) = grep { ref $_ eq 'Dancer2::Plugin::DBIC' } @{ app->plugins };
+
+$plugin->config->{default} = {
+    schema_class => 'Foo',
+    dsn =>  "dbi:SQLite:dbname=$dbfile1",
 };
 
 lives_and { ok schema->resultset('User')->find('bob'), 'Found bob.' }
