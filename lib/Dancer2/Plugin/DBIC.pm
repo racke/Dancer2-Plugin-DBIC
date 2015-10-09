@@ -8,7 +8,7 @@ use utf8;
 use Dancer2::Plugin2;
 use DBICx::Sugar;
 
-plugin_keywords qw/schema resultset rset/;
+plugin_keywords 'schema', [qw/ resultset rset/];
 
 sub schema {
     my ($plugin, $name) = @_;
@@ -20,8 +20,6 @@ sub resultset {
     my ($plugin, $rset_name) = @_;
     return $plugin->schema->resultset($rset_name);
 }
-
-*rset = *resultset;
 
 # ABSTRACT: DBIx::Class interface for Dancer2 applications
 
